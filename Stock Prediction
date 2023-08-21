@@ -1,0 +1,133 @@
+Importpandas as pd
+
+Import numpy as np
+
+From matplotlib import pyplot as plt
+
+From sklearn import model_selection
+
+From sklearn.metrics import confusion_matrix
+
+From sklearn.preprocessing import StandardScaler
+
+From sklearn.model_selection import train_test_split
+
+From sklearn.preprocessing import MinMaxScaler
+
+From keras.models import Sequential
+
+From keras.layers import Dense
+
+From keras.layers import LSTM
+
+From keras.layers import Dropout
+
+Df=pd.read_csv(“TSLA.csv”)
+
+Df.head(10
+
+
+
+
+
+
+
+Training = df.iloc[:800, 1:2].values
+
+Testing = df.iloc[800:, 1:2].values
+
+
+
+X_train = []
+
+Y_train = []
+
+For iter in range(60, 800):
+
+    X_train.append(training_scaled[iter-60:iter, 0])
+
+    Y_train.append(training_scaled[iter, 0])
+
+X_train, y_train=np.array(x_train), np.array(y_train)
+
+X_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
+
+
+
+Algo = Sequential()
+
+Algo.add(LSTM(units = 50, return_sequences = True, input_shape = (x_train.shape[1], 1)))
+
+Algo.add(Dropout(0.2))
+
+Algo.add(LSTM(units = 50, return_sequences = True))
+
+Algo.add(Dropout(0.2))
+
+Algo.add(LSTM(units = 50, return_sequences = True))
+
+Algo.add(Dropout(0.2))
+
+Algo.add(LSTM(units = 50))
+
+Algo.add(Dropout(0.2))
+
+Algo.add(Dense(units = 1))
+
+Algo.compile(optimizer = ‘adam’, loss = ‘mean_squared_error’)
+
+Algo.fit(x_train, y_train, epochs = 100, batch_size = 32)
+
+
+
+Data_train = df.iloc[:800, 1:2]
+
+Data_test = df.iloc[800:, 1:2]
+
+Data_total = pd.concat((data_train, data_test), axis = 0)
+
+Toal_input = data_total[len(data_total) – len(data_test) – 60:].values
+
+Total_input = total_input.reshape(-1,1)
+
+Total_input = sc.transform(total_input)
+
+X_test = []
+
+For iter in range(60, 519):
+
+    X_test.append(total_input[iter-60:iter, 0])
+
+X_test = np.array(x_test)
+
+X_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
+
+Print(x_test.shape)
+
+
+
+Predicted_price = algo.predict(x_test)
+
+Predicted_price = sc.inverse_transform(predicted_price)
+
+
+
+Plt.plot(df.loc[800:, ‘Date’],data_test.values, color = ‘red’, label = ‘Real TESLA Stock Price’)
+
+Plt.plot(df.loc[800:, ‘Date’],predicted_price, color = ‘blue’, label = ‘Predicted TESLA Stock Price’)
+
+Plt.xticks(np.arange(0,459,50))
+
+Plt.title(‘TESLA Stock Price Prediction’)
+
+Plt.xlabel(‘Time’)
+
+Plt.ylabel(‘TESLA Stock Price’)
+
+Plt.legend()
+
+Plt.show()
+
+
+
+
